@@ -43,8 +43,8 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 // --- KONFIGURATION ---
-const N8N_CHAT_WEBHOOK_URL = "https://n8n-production-a003.up.railway.app/webhook/chat-input";
-const N8N_UPLOAD_WEBHOOK_URL = "https://n8n-production-a003.up.railway.app/webhook/file-upload";
+const N8N_CHAT_WEBHOOK_URL = "https://notebooklm.app.n8n.cloud/webhook-test/chat-input";
+const N8N_UPLOAD_WEBHOOK_URL = "https://notebooklm.app.n8n.cloud/webhook/file-upload";
 const LOGO_IMAGE_URL = "https://www.freelogovectors.net/wp-content/uploads/2025/06/notebooklm_logo-freelogovectors.net_.png"; // Hier den Link zum Logo-Bild einfügen
 
 export default function App() {
