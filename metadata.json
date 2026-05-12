@@ -1,0 +1,5 @@
+{
+  "name": "Fake NotebookLM",
+  "description": "A minimalist AI notebook interface inspired by NotebookLM, featuring a chat interface and source management layout.",
+  "requestFramePermissions": []
+}
