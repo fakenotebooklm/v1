@@ -43,19 +43,25 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 // --- KONFIGURATION ---
-const N8N_CHAT_WEBHOOK_URL = "https://notebooklm.app.n8n.cloud/webhook/chat-input";
-const N8N_UPLOAD_WEBHOOK_URL = "https://notebooklm.app.n8n.cloud/webhook/file-upload";
+const N8N_BASE_URL = "https://notebooklm.app.n8n.cloud";
 const LOGO_IMAGE_URL = "https://www.freelogovectors.net/wp-content/uploads/2025/06/notebooklm_logo-freelogovectors.net_.png"; // Hier den Link zum Logo-Bild einfügen
 
 export default function App() {
   const [messages, setMessages] = useState<{ id: string; role: 'user' | 'assistant'; content: string }[]>([]);
   const [input, setInput] = useState('');
   const [sources, setSources] = useState<{ id: string; name: string }[]>([]);
+  const [isDevMode, setIsDevMode] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [isTyping, setIsTyping] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+
+  const getWebhookUrl = (type: 'chat' | 'upload') => {
+    const prefix = isDevMode ? "/webhook-test/" : "/webhook/";
+    const path = type === 'chat' ? "chat-input" : "file-upload";
+    return `${N8N_BASE_URL}${prefix}${path}`;
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -78,7 +84,7 @@ export default function App() {
 
     try {
       // --- N8N CHAT WEBHOOK CALL ---
-      const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
+      const response = await fetch(getWebhookUrl('chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -151,7 +157,7 @@ export default function App() {
         formData.append('file', file);
         formData.append('fileName', file.name);
 
-        const response = await fetch(N8N_UPLOAD_WEBHOOK_URL, {
+        const response = await fetch(getWebhookUrl('upload'), {
           method: 'POST',
           body: formData
         });
@@ -203,6 +209,16 @@ export default function App() {
             </button>
           </div>
           <div className="flex items-center gap-3 ml-4">
+            <button 
+              onClick={() => setIsDevMode(!isDevMode)}
+              className={`text-[10px] font-bold px-2 py-0.5 rounded border transition-colors ${
+                isDevMode 
+                  ? 'bg-amber-100 text-amber-700 border-amber-200' 
+                  : 'bg-gray-100 text-gray-500 border-gray-200'
+              }`}
+            >
+              DEV MODE: {isDevMode ? 'ON' : 'OFF'}
+            </button>
             <span className="text-[10px] font-bold text-gray-400 border border-gray-300 px-1.5 py-0.5 rounded tracking-tighter">PRO</span>
             <Grid className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900 transition-colors" />
             <div className="w-8 h-8 rounded-full bg-[#E64A19] flex items-center justify-center text-white font-bold text-xs shadow-sm cursor-pointer">
